@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Button, Card, Layout, Menu, Space, Typography } from 'antd';
+import { Button, Layout, Menu, Space, Typography } from 'antd';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 
 const { Header, Content, Sider } = Layout;
@@ -8,6 +8,7 @@ const { Title } = Typography;
 const navItems = [
   { key: '/', label: <Link to="/">仪表盘</Link> },
   { key: '/requirements', label: <Link to="/requirements">需求列表</Link> },
+  { key: '/generate', label: <Link to="/generate">智能生成</Link> },
 ];
 
 export function LayoutShell() {
@@ -15,6 +16,9 @@ export function LayoutShell() {
   const activeKey = useMemo(() => {
     if (location.pathname.startsWith('/requirements')) {
       return '/requirements';
+    }
+    if (location.pathname.startsWith('/generate')) {
+      return '/generate';
     }
     return location.pathname;
   }, [location.pathname]);
@@ -43,7 +47,9 @@ export function LayoutShell() {
           </Title>
           <div className="app-tools">
             <Space>
-              <Button type="primary">新建需求</Button>
+              <Button type="primary">
+                <Link to="/generate">智能生成需求</Link>
+              </Button>
             </Space>
           </div>
         </Header>
