@@ -24,6 +24,56 @@ export interface RequirementSummary {
   progress: number;
 }
 
+export interface GeneratedRequirementDraft {
+  title: string;
+  category: string;
+  priority: RequirementPriority;
+  owner: string;
+  description: string;
+  acceptanceCriteria: string[];
+  risks: string[];
+  timeline: string;
+}
+
+export function generateRequirementDraft(input: {
+  scenario: string;
+  user: string;
+  pain: string;
+  goal: string;
+  constraints: string;
+}): GeneratedRequirementDraft {
+  const title = `面向 ${input.user} 的 ${input.goal} 优化需求`;
+  const category = input.scenario.includes('运营')
+    ? '运营管理'
+    : input.scenario.includes('审批')
+      ? '流程优化'
+      : '产品规划';
+  const priority = input.constraints.toLowerCase().includes('紧急') || input.pain.toLowerCase().includes('阻塞')
+    ? '紧急'
+    : input.goal.toLowerCase().includes('效率')
+      ? '高'
+      : '中';
+
+  return {
+    title,
+    category,
+    priority,
+    owner: '产品经理',
+    description: `为 ${input.user} 提供一套基于 ${input.scenario} 的能力，解决 ${input.pain}，帮助团队提升 ${input.goal} 的效率与可控性，并在限制条件 ${input.constraints} 下保证实施落地。`,
+    acceptanceCriteria: [
+      '用户能够根据场景快速生成初始需求文案',
+      '输出内容包含目标、优先级、验收标准和风险提示',
+      '生成结果可直接进入需求评审流程',
+      '支持根据反馈继续修订并保存为正式需求',
+    ],
+    risks: [
+      '需求边界需要业务负责人最终确认',
+      '系统集成依赖需提前梳理与评估',
+    ],
+    timeline: priority === '紧急' ? '1 周' : priority === '高' ? '2 周' : '3 周',
+  };
+}
+
 export const requirements: Requirement[] = [
   {
     id: 'REQ-101',
